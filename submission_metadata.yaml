@@ -1,0 +1,5 @@
+team_name: "Antigravity Engineers"
+reproduce_command: "python src/rank.py --candidates data/candidates.jsonl.gz --out output/team_xxx.csv"
+compute_spec: "16 GB RAM, 8 Core CPU, No GPU, No network access"
+ai_tools_declaration: "Google Antigravity (Gemini 3.5 Flash) was used to pair-program and structure the backend and integration code."
+methodology_summary: "We implemented a two-stage candidate ranking system. In the offline precomputation stage, candidates are parsed, validated for honeypots, and their profile texts (headline, summary, skills, career descriptions) are embedded using a local sentence-transformer (all-MiniLM-L6-v2). In the online fast ranking stage, candidates are loaded, semantic scores are computed using vectorized cosine similarity against the JD, skill overlap is computed using proficiency and duration, career scores penalize stability and services companies, and behavioral signals are combined into an availability multiplier. Final scores are ranked, filtered for hard disqualifiers, and reasoning is generated via Jinja2 templates."

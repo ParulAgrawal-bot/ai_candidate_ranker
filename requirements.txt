@@ -1,0 +1,8 @@
+numpy
+pandas
+sentence-transformers
+jinja2
+streamlit
+pyyaml
+scikit-learn
+scipy
