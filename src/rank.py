@@ -26,6 +26,12 @@ def calculate_cosine_similarity(vec_a, vec_b):
     if norm_a == 0 or norm_b == 0:
         return 0.0
     return float(dot_product / (norm_a * norm_b))
+    def extract_numeric_id(candidate_id):
+    """Extract numeric part from CAND_XXXXXXX format for proper tie-breaking."""
+    try:
+        return int(candidate_id.split('_')[1])
+    except (IndexError, ValueError):
+        return float('inf')
 
 def main():
     parser = argparse.ArgumentParser(description="Rank candidates based on Job Description match.")
@@ -111,14 +117,11 @@ def main():
         if count % 20000 == 0:
             print(f"Scored {count} candidates...")
 
-    print(f"Scoring complete. Total candidates processed: {count}")
-
-    # Sort candidates
+    print("Sorting and selecting top-100 shortlisted candidates...")
     # Sort criteria:
     # 1. Score descending
-    # 2. Candidate ID ascending (as tie-breaker)
-    print("Sorting and selecting top-100 shortlisted candidates...")
-    results.sort(key=lambda x: (-x["score"], x["candidate_id"]))
+    # 2. Candidate ID ascending by numeric value (not lexicographic) for tie-breaking
+    results.sort(key=lambda x: (-x["score"], extract_numeric_id(x["candidate_id"])))
     
     top_100 = results[:100]
     
