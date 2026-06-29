@@ -45,9 +45,9 @@ jobs:
                 "summary": f"Test candidate with {i} years of experience in tech.",
                 "location": "India",
                 "years_of_experience": i % 20
-            }
-        }
-        f.write(json.dumps(candidate) + '\n')
+              }
+          }
+          f.write(json.dumps(candidate) + '\n')
         PYTHON_EOF
         
         # Zip it as required by pipeline
