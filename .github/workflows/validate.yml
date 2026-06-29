@@ -37,9 +37,9 @@ jobs:
         import json
 
         with open('data/test_candidates.jsonl', 'w') as f:
-        for i in range(1, 101):
-        candidate = {
-            "profile": {
+          for i in range(1, 101):
+            candidate = {
+              "profile": {
                 "candidate_id": f"CAND_{i:07d}",
                 "headline": f"Professional {i}",
                 "summary": f"Test candidate with {i} years of experience in tech.",
