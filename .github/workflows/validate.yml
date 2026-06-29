@@ -33,10 +33,22 @@ jobs:
         mkdir -p data
         
         # Create a small dummy candidates dataset for testing CI pipeline
-        cat << 'EOF' > data/test_candidates.jsonl
-        {"profile": {"candidate_id": "CAND_0000001", "headline": "Senior AI Engineer", "summary": "Experienced ML Engineer shipping embeddings and vector search in production.", "location": "Pune, India", "years_of_experience": 6}, "skills": [{"name": "sentence-transformers", "proficiency": "expert", "duration_months": 24, "endorsements": 5}, {"name": "qdrant", "proficiency": "expert", "duration_months": 18, "endorsements": 8}, {"name": "ndcg", "proficiency": "advanced", "duration_months": 12, "endorsements": 3}, {"name": "python", "proficiency": "expert", "duration_months": 48, "endorsements": 12}], "career_history": [{"company": "Product Corp", "title": "Senior Machine Learning Engineer", "duration_months": 36, "description": "Shipped and scaled vector search indexing pipeline to production using Qdrant and sentence-transformers."}], "redrob_signals": {"last_active_date": "2026-06-25", "open_to_work_flag": true, "recruiter_response_rate": 0.85, "notice_period_days": 15, "github_activity_score": 75}}
-        {"profile": {"candidate_id": "CAND_0000002", "headline": "Python Developer", "summary": "Backend developer with basic knowledge of ML models.", "location": "Noida, India", "years_of_experience": 3}, "skills": [{"name": "python", "proficiency": "advanced", "duration_months": 36, "endorsements": 4}], "career_history": [{"company": "Service Provider Inc", "title": "Software Engineer", "duration_months": 24, "description": "Developed backend APIs using Django for client projects."}], "redrob_signals": {"last_active_date": "2026-06-20", "open_to_work_flag": false, "recruiter_response_rate": 0.6, "notice_period_days": 45}}
-        EOF
+        python << 'PYTHON_EOF'
+        import json
+
+        with open('data/test_candidates.jsonl', 'w') as f:
+        for i in range(1, 101):
+        candidate = {
+            "profile": {
+                "candidate_id": f"CAND_{i:07d}",
+                "headline": f"Professional {i}",
+                "summary": f"Test candidate with {i} years of experience in tech.",
+                "location": "India",
+                "years_of_experience": i % 20
+            }
+        }
+        f.write(json.dumps(candidate) + '\n')
+        PYTHON_EOF
         
         # Zip it as required by pipeline
         gzip -k data/test_candidates.jsonl
