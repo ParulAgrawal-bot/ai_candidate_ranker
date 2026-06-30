@@ -118,7 +118,7 @@ def main():
     # 1. Score descending
     # 2. Candidate ID ascending (as tie-breaker)
     print("Sorting and selecting top-100 shortlisted candidates...")
-    results.sort(key=lambda x: (-x["score"], x["candidate_id"]))
+    results.sort(key=lambda x: (-round(x["score"], 4), x["candidate_id"]))
     
     top_100 = results[:100]
     

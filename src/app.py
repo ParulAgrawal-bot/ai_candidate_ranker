@@ -213,7 +213,7 @@ def score_uploaded_candidates(candidates_list, jd_text):
         })
         
     # Sort and rank
-    results.sort(key=lambda x: (-x["final_score"], x["candidate_id"]))
+    results.sort(key=lambda x: (-round(x["final_score"], 4), x["candidate_id"]))
     
     for i, res in enumerate(results):
         res["rank"] = i + 1
