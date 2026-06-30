@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 # Add the parent directory to the path to make imports work when run as a script
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.data_parser import stream_candidates
 from src.skill_scorer import calculate_skill_score

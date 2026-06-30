@@ -1,5 +1,7 @@
 # Local data and precomputed artifacts
-
+data/
+artifacts/
+output/
 
 # Python caching
 __pycache__/

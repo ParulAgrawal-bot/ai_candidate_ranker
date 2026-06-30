@@ -8,7 +8,7 @@ import numpy as np
 import streamlit as st
 
 # Add parent directory to path for imports
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.data_parser import parse_and_validate_candidate
 from src.skill_scorer import calculate_skill_score

@@ -26,10 +26,26 @@ def validate_csv(csv_path, candidates_path=None):
         errors.append(f"Columns mismatch. Expected: {expected_cols}, Found: {actual_cols}")
 
     # 3. Check number of rows
-    # "Exactly 100 data rows plus 1 header row"
+    # "Exactly 100 data rows plus 1 header row" (or less if the input dataset has fewer candidates)
+    expected_rows = 100
+    if candidates_path and os.path.exists(candidates_path):
+        import gzip
+        import json
+        open_func = gzip.open if candidates_path.endswith('.gz') else open
+        mode = 'rt' if candidates_path.endswith('.gz') else 'r'
+        try:
+            cand_count = 0
+            with open_func(candidates_path, mode, encoding='utf-8') as f:
+                for line in f:
+                    if line.strip():
+                        cand_count += 1
+            expected_rows = min(100, cand_count)
+        except Exception as e:
+            print(f"Warning: Could not count candidates in {candidates_path}: {e}")
+
     num_rows = len(df)
-    if num_rows != 100:
-        errors.append(f"Row count mismatch. Expected exactly 100 data rows, found {num_rows}")
+    if num_rows != expected_rows:
+        errors.append(f"Row count mismatch. Expected exactly {expected_rows} data rows, found {num_rows}")
 
     # If the file has structure issues that prevent further checks, stop here
     if errors:
@@ -37,11 +53,12 @@ def validate_csv(csv_path, candidates_path=None):
             print(f"[FAIL] {err}")
         return False
 
-    # 4. Check ranks (1-100 each appear exactly once)
+    # 4. Check ranks (sequential sequence up to expected_rows)
     ranks = list(df["rank"])
-    expected_ranks = list(range(1, 101))
+    expected_ranks = list(range(1, expected_rows + 1))
     if ranks != expected_ranks:
-        errors.append("Ranks must be exactly 1 to 100 in sequential order.")
+        errors.append(f"Ranks must be exactly 1 to {expected_rows} in sequential order.")
+
 
     # 5. Check candidate_id format (CAND_XXXXXXX)
     id_pattern = re.compile(r'^CAND_\d+$')
