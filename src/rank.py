@@ -5,16 +5,29 @@ import pickle
 import numpy as np
 import pandas as pd
 
-# Add the parent directory to the path to make imports work when run as a script
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Robust imports: try package-style imports first, then fall back to local module imports
+try:
+    # When running as python -m src.rank or when repo root is on PYTHONPATH
+    from src.data_parser import stream_candidates
+    from src.skill_scorer import calculate_skill_score
+    from src.career_scorer import calculate_career_score
+    from src.feature_builder import calculate_rule_score
+    from src.behavioral_scorer import compute_behavioral_multiplier
+    from src.hybrid_scorer import calculate_hybrid_score
+    from src.reasoning_gen import generate_reasoning
+except ModuleNotFoundError:
+    # Fallback if running with working directory set to src/ (or similar)
+    src_dir = os.path.dirname(os.path.abspath(__file__))
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
+    from data_parser import stream_candidates
+    from skill_scorer import calculate_skill_score
+    from career_scorer import calculate_career_score
+    from feature_builder import calculate_rule_score
+    from behavioral_scorer import compute_behavioral_multiplier
+    from hybrid_scorer import calculate_hybrid_score
+    from reasoning_gen import generate_reasoning
 
-from src.data_parser import stream_candidates
-from src.skill_scorer import calculate_skill_score
-from src.career_scorer import calculate_career_score
-from src.feature_builder import calculate_rule_score
-from src.behavioral_scorer import compute_behavioral_multiplier
-from src.hybrid_scorer import calculate_hybrid_score
-from src.reasoning_gen import generate_reasoning
 
 def calculate_cosine_similarity(vec_a, vec_b):
     """
@@ -26,6 +39,7 @@ def calculate_cosine_similarity(vec_a, vec_b):
     if norm_a == 0 or norm_b == 0:
         return 0.0
     return float(dot_product / (norm_a * norm_b))
+
 
 def main():
     parser = argparse.ArgumentParser(description="Rank candidates based on Job Description match.")
